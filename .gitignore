@@ -1,0 +1,19 @@
+# Data files
+data/
+*.mat
+*.hdr
+*.bsq
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Models
+results/models/*
+*.h5
+*.keras
+
+# IDE
+.vscode/
+.idea/
