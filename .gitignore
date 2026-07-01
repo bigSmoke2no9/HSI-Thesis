@@ -1,9 +1,3 @@
-# Data files
-data/
-*.mat
-*.hdr
-*.bsq
-
 # Python
 __pycache__/
 *.pyc
