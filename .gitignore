@@ -12,3 +12,9 @@ results/models/*
 # IDE
 .vscode/
 .idea/
+src_latex/*.log
+src_latex/*.out
+src_latex/*.synctex.gz
+src_latex/*.blg
+src_latex/*.aux
+src_latex/*.bbl

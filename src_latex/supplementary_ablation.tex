@@ -1,0 +1,46 @@
+\documentclass[10pt]{article}
+\usepackage[landscape,margin=0.6in]{geometry}
+\usepackage{booktabs,amsmath,graphicx}
+\begin{document}
+\section*{Supplementary: full ablation results (mean $\pm$ std of five seeds)}
+OA is given as mean $\pm$ population standard deviation (\%), AA as mean (\%), followed by the number of input features (Feat.) and the number of trainable parameters (Params). Stage 6 is the proposed model (subset from DE for Indian Pines and Salinas, from PSO for Pavia University). ``GAP (proposed, default run)'' is a second, independent five-seed run of the proposed model.
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lrrrrrrrrrrrr@{}}
+\toprule
+ & \multicolumn{4}{c}{Indian Pines} & \multicolumn{4}{c}{Salinas} & \multicolumn{4}{c}{Pavia University} \\ \cmidrule(r){2-5}\cmidrule(r){6-9}\cmidrule{10-13}
+Variant & OA & AA & Feat. & Params & OA & AA & Feat. & Params & OA & AA & Feat. & Params \\ \midrule
+Stage 0: single-scale baseline & 98.72 $\pm$ 0.35 & 98.06 & 12 & 46{,}432 & 99.95 $\pm$ 0.02 & 99.94 & 12 & 46{,}432 & 99.50 $\pm$ 0.11 & 98.59 & 12 & 45{,}529 \\
+Stage 1: + multi-scale (7/5/3) & 99.16 $\pm$ 0.22 & 98.67 & 12 & 103{,}840 & 99.97 $\pm$ 0.01 & 99.96 & 12 & 103{,}840 & 99.72 $\pm$ 0.08 & 99.31 & 12 & 102{,}937 \\
+Stage 2: + residual shortcut & 99.15 $\pm$ 0.16 & 98.66 & 12 & 118{,}336 & 99.96 $\pm$ 0.02 & 99.95 & 12 & 118{,}336 & 99.68 $\pm$ 0.07 & 99.25 & 12 & 117{,}433 \\
+Stage 3: + relevance-graded streams & 98.93 $\pm$ 0.40 & 97.61 & 12 & 92{,}448 & 99.93 $\pm$ 0.03 & 99.93 & 12 & 92{,}448 & 99.65 $\pm$ 0.05 & 99.01 & 12 & 91{,}545 \\
+Stage 4: + CBAM & 99.16 $\pm$ 0.19 & 98.69 & 12 & 93{,}643 & 99.94 $\pm$ 0.03 & 99.89 & 12 & 93{,}643 & 99.45 $\pm$ 0.05 & 98.56 & 12 & 92{,}740 \\
+Stage 5: + Seg-PCA and mRMR (15 features) & 99.07 $\pm$ 0.16 & 98.77 & 15 & 102{,}443 & 99.96 $\pm$ 0.03 & 99.95 & 15 & 102{,}443 & 99.60 $\pm$ 0.04 & 98.85 & 15 & 101{,}540 \\
+Stage 6: + subset search (proposed) & 98.94 $\pm$ 0.32 & 98.61 & 5 & 73{,}707 & 99.94 $\pm$ 0.02 & 99.92 & 4 & 70{,}859 & 99.49 $\pm$ 0.05 & 98.63 & 7 & 78{,}756 \\
+\midrule
+Head: GAP (proposed, default run) & 98.90 $\pm$ 0.31 & 98.50 & 5 & 73{,}707 & 99.95 $\pm$ 0.02 & 99.92 & 4 & 70{,}859 & 99.51 $\pm$ 0.10 & 98.76 & 7 & 78{,}756 \\
+Head: GMP & 98.73 $\pm$ 0.13 & 97.76 & 5 & 73{,}707 & 99.92 $\pm$ 0.05 & 99.90 & 4 & 70{,}859 & 99.35 $\pm$ 0.14 & 98.47 & 7 & 78{,}756 \\
+Head: Flatten & 98.84 $\pm$ 0.09 & 97.87 & 5 & 1{,}245{,}163 & 99.97 $\pm$ 0.01 & 99.96 & 4 & 1{,}242{,}315 & 99.92 $\pm$ 0.03 & 99.87 & 7 & 1{,}250{,}212 \\
+Head: GAP + GMP & 98.79 $\pm$ 0.27 & 98.11 & 5 & 81{,}899 & 99.92 $\pm$ 0.04 & 99.89 & 4 & 79{,}051 & 99.31 $\pm$ 0.03 & 98.38 & 7 & 86{,}948 \\
+\midrule
+Arch: no residual shortcut & 99.14 $\pm$ 0.14 & 98.72 & 5 & 61{,}963 & 99.93 $\pm$ 0.05 & 99.89 & 4 & 60{,}139 & 99.61 $\pm$ 0.04 & 98.95 & 7 & 64{,}964 \\
+Arch: uniform 7$\times$7 & 84.71 $\pm$ 28.66 & 81.73 & 5 & 76{,}523 & 99.96 $\pm$ 0.04 & 99.94 & 4 & 72{,}907 & 99.54 $\pm$ 0.09 & 98.76 & 7 & 82{,}852 \\
+Arch: uniform 5$\times$5 & 99.15 $\pm$ 0.16 & 98.68 & 5 & 72{,}683 & 99.93 $\pm$ 0.05 & 99.91 & 4 & 69{,}835 & 99.52 $\pm$ 0.05 & 98.82 & 7 & 77{,}476 \\
+Arch: uniform 3$\times$3 & 99.15 $\pm$ 0.15 & 98.31 & 5 & 70{,}123 & 99.92 $\pm$ 0.04 & 99.90 & 4 & 67{,}787 & 99.42 $\pm$ 0.06 & 98.54 & 7 & 73{,}892 \\
+Arch: reversed kernels (3/5/7) & 99.20 $\pm$ 0.07 & 98.25 & 5 & 72{,}427 & 99.92 $\pm$ 0.04 & 99.91 & 4 & 69{,}579 & 99.49 $\pm$ 0.09 & 98.70 & 7 & 77{,}476 \\
+Arch: uniform 3D depth (1-1-1) & 99.03 $\pm$ 0.15 & 97.90 & 5 & 43{,}483 & 99.91 $\pm$ 0.04 & 99.89 & 4 & 40{,}635 & 99.50 $\pm$ 0.05 & 98.64 & 7 & 48{,}532 \\
+\midrule
+CBAM: channel only & 99.05 $\pm$ 0.31 & 98.31 & 5 & 73{,}608 & 99.90 $\pm$ 0.05 & 99.90 & 4 & 70{,}760 & 99.48 $\pm$ 0.09 & 98.63 & 7 & 78{,}657 \\
+CBAM: spatial only & 98.98 $\pm$ 0.13 & 98.25 & 5 & 72{,}611 & 99.96 $\pm$ 0.03 & 99.96 & 4 & 69{,}763 & 99.69 $\pm$ 0.03 & 99.19 & 7 & 77{,}660 \\
+CBAM: no outer residual add & 98.97 $\pm$ 0.14 & 97.61 & 5 & 73{,}707 & 99.91 $\pm$ 0.04 & 99.87 & 4 & 70{,}859 & 99.50 $\pm$ 0.04 & 98.76 & 7 & 78{,}756 \\
+\midrule
+Arch: single stream, parallel 7/5/3 & 99.08 $\pm$ 0.20 & 98.26 & 5 & 72{,}267 & 99.94 $\pm$ 0.02 & 99.92 & 4 & 65{,}515 & 99.61 $\pm$ 0.05 & 98.95 & 7 & 84{,}868 \\
+\midrule
+Input: 12 PCA (no Seg-PCA/mRMR/subset) & 99.16 $\pm$ 0.23 & 98.65 & 12 & 93{,}643 & 99.97 $\pm$ 0.02 & 99.94 & 12 & 93{,}643 & 99.48 $\pm$ 0.04 & 98.58 & 12 & 92{,}740 \\
+Input: 15 mRMR (no subset search) & 98.98 $\pm$ 0.19 & 98.11 & 15 & 102{,}443 & 99.96 $\pm$ 0.02 & 99.94 & 15 & 102{,}443 & 99.60 $\pm$ 0.05 & 98.92 & 15 & 101{,}540 \\
+\bottomrule
+\end{tabular}}
+\end{center}
+\end{document}
