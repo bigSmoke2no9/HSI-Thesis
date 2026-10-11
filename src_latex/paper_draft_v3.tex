@@ -58,7 +58,7 @@
 	\maketitle
 	
 	\begin{abstract}
-		Hyperspectral image (HSI) classification with deep networks is hindered by high spectral dimensionality, redundant bands and a small number of labelled samples. This paper presents a compact framework that combines Segmented PCA (Seg-PCA), minimum-Redundancy-Maximum-Relevance (mRMR) ranking and a metaheuristic subset search to reduce the 200 (Indian Pines), 204 (Salinas) and 103 (Pavia University) spectral bands to only five, four and seven input features. The selected features are split into three relevance groups, and each group is processed by its own 3D-2D CNN stream: the most relevant group gets the deepest stream and the largest kernel. The stream outputs are fused, refined with a convolutional block attention module (CBAM) and classified through global average pooling. With 16\% of the labelled pixels used for training, the model reaches an overall accuracy of 98.92\% $\pm$ 0.24, 99.94\% $\pm$ 0.03 and 99.47\% $\pm$ 0.07 on the three datasets (mean of five seeds) with fewer than 79,000 parameters. This is comparable to earlier methods that use 15 features on Indian Pines and Salinas, and 0.15--0.47 points lower than the best of them on Pavia University. An ablation study shows that the global-average-pooling head matches a flatten head with about 17 times fewer parameters on Indian Pines and Salinas, but loses 0.43 points on Pavia University, while the accuracy changes caused by the other components stay close to the seed-to-seed variation.
+		Hyperspectral image (HSI) classification with deep networks is hindered by high spectral dimensionality, redundant bands and a small number of labelled samples. This paper presents a compact framework that combines Segmented PCA (Seg-PCA), minimum-Redundancy-Maximum-Relevance (mRMR) ranking and a metaheuristic subset search to reduce the 200 (Indian Pines), 204 (Salinas) and 103 (Pavia University) spectral bands to only five, four and seven input features. The selected features are split into three relevance groups, and each group is processed by its own 3D-2D CNN stream: the most relevant group gets the deepest stream and the largest kernel. The stream outputs are fused, refined with a convolutional block attention module (CBAM) and classified through global average pooling. With 16\% of the labelled pixels used for training, the model reaches an overall accuracy of 98.92\% $\pm$ 0.24, 99.94\% $\pm$ 0.03 and 99.47\% $\pm$ 0.07 on the three datasets (mean of five seeds) with fewer than 79,000 parameters. This is comparable to earlier methods that use 15 features on Indian Pines and Salinas, and 0.15--0.47 points lower than the strongest prior result on Pavia University. An ablation study shows that the global-average-pooling head matches a flatten head with about 17 times fewer parameters on Indian Pines and Salinas, but loses 0.43 points on Pavia University, while the accuracy changes caused by the other components stay close to the seed-to-seed variation.
 	\end{abstract}
 	
 	\begin{IEEEkeywords}
@@ -70,11 +70,14 @@
 	% =====================================================================
 	Hyperspectral remote sensing records hundreds of narrow spectral bands for every pixel, so each image is a data cube with two spatial and one spectral dimension. The spectral signature carries information about the chemical and physical structure of the observed material, which makes HSI useful for mineral exploration, environmental monitoring, precision agriculture and food quality assurance. Deep learning has become the main tool for HSI analysis, with convolutional neural networks (CNN)\cite{cnn14}, stacked autoencoders (SAE)\cite{sae8}, recurrent neural networks (RNN)\cite{rnn16} and generative adversarial networks\cite{gan19} all applied to the task.
 	
-	Many works combine spatial and spectral information. A 2D CNN extracts spatial features efficiently\cite{makantis}, while 3D CNNs process the spatial and spectral dimensions together with a smaller number of parameters\cite{Hamida}. Fast 3D-CNN\cite{compact} uses incremental PCA together with a 3D-2D CNN, and HybridSN\cite{hybridsn} stacks 3D and 2D convolutions to learn spectral-spatial features. Other designs extract the spectral and spatial features separately and then fuse them\cite{guo,li}, and a wavelet-based Spectral Network has also been proposed\cite{spectral}. Multibranch fusion of 2D and 3D CNNs\cite{multibranch}, together with a segmentation step\cite{multibranch2}, improves accuracy over single-path networks. On the preprocessing side, segmented versions of PCA\cite{spca}, t-SNE\cite{stsne} and NMF\cite{snmf} better respect the local structure of correlated spectral bands.
+	Many works combine spatial and spectral information. A 2D CNN extracts spatial features efficiently\cite{makantis}, while 3D CNNs process the spatial and spectral dimensions together with a smaller number of parameters\cite{Hamida}. Fast 3D-CNN\cite{compact} uses incremental PCA together with a 3D-2D CNN, and HybridSN\cite{hybridsn} stacks 3D and 2D convolutions to learn spectral-spatial features. Other designs extract the spectral and spatial features separately and then fuse them\cite{guo,li}, and a wavelet-based Spectral Network has also been proposed\cite{spectral}. Multibranch fusion of 2D and 3D CNNs\cite{multibranch} improves accuracy 
+	over single-path networks, and adding a segmentation step before fusion 
+	further boosts performance\cite{multibranch2}. On the preprocessing side, segmented versions of PCA\cite{spca}, t-SNE\cite{stsne} and NMF\cite{snmf} better respect the local structure of correlated spectral bands.
 	
-	In our earlier work\cite{ahmed2024,ahmed2025}, Seg-PCA and mRMR were used to 
-	rank 15 features, which were split into three equal groups and fed to a 
-	three-branch 2D-3D CNN. That design still keeps 15 features and ends in a flatten layer followed by fully connected layers. In this paper we extend it in three ways. First, a binary metaheuristic searches the 15 ranked features for a much smaller subset, with a fitness that rewards accuracy and penalises subset size. Second, every stream gets a residual shortcut with a separable 2D convolution, and the fused features are refined by CBAM\cite{cbam}. Third, a global average pooling (GAP) head replaces the flatten layer, which keeps the model small.
+	In earlier works\cite{ahmed2024,multibranch2}, Seg-PCA and mRMR were used 
+	to rank 15 features, which were split into three equal groups and fed to a 
+	three-branch 2D-3D CNN. That design still keeps 15 features and ends in a 
+	flatten layer followed by fully connected layers. In this paper we extend it in three ways. First, a binary metaheuristic searches the 15 ranked features for a much smaller subset, with a fitness that rewards accuracy and penalises subset size. Second, every stream gets a residual shortcut with a separable 2D convolution, and the fused features are refined by CBAM\cite{cbam}. Third, a global average pooling (GAP) head replaces the flatten layer, which keeps the model small.
 	
 	The main contributions of this paper are:
 	\begin{enumerate}
@@ -250,7 +253,9 @@
 	
 	\begin{table}[t]
 		\centering
-		\caption{Comparison (16\% training, 4\% validation, 80\% test). The rows of the other methods are taken from\cite{ahmed2024}, where all of them were run with 15 input features (Feat.).}
+		\caption{Comparison (16\% training, 4\% validation, 80\% test). The rows 
+			of the other methods are taken from\cite{ahmed2024,multibranch2}, where 
+			all of them were run with 15 input features (Feat.) on the same split.}
 		\label{stateofarts}
 		\renewcommand*\arraystretch{1.05}
 		\footnotesize
