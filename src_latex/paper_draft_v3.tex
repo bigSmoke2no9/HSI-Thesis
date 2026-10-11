@@ -74,14 +74,17 @@
 	over single-path networks, and adding a segmentation step before fusion 
 	further boosts performance\cite{multibranch2}. On the preprocessing side, segmented versions of PCA\cite{spca}, t-SNE\cite{stsne} and NMF\cite{snmf} better respect the local structure of correlated spectral bands.
 	
-	In earlier works\cite{ahmed2024,multibranch2}, Seg-PCA and mRMR were used 
-	to rank 15 features, which were split into three equal groups and fed to a 
+	In an earlier work\cite{ahmed2024}, Seg-PCA and mRMR were used to rank 
+	15 features, which were split into three equal groups and fed to a 
 	three-branch 2D-3D CNN. That design still keeps 15 features and ends in a 
 	flatten layer followed by fully connected layers. In this paper we extend it in three ways. First, a binary metaheuristic searches the 15 ranked features for a much smaller subset, with a fitness that rewards accuracy and penalises subset size. Second, every stream gets a residual shortcut with a separable 2D convolution, and the fused features are refined by CBAM\cite{cbam}. Third, a global average pooling (GAP) head replaces the flatten layer, which keeps the model small.
 	
 	The main contributions of this paper are:
 	\begin{enumerate}
-		\item A three-step feature pipeline (Seg-PCA, mRMR and a metaheuristic subset search) that reduces the 200, 204 and 103 bands of Indian Pines, Salinas and Pavia University to five, four and seven input features.
+		\item A three-step feature pipeline (Seg-PCA, mRMR and a metaheuristic subset 
+		search) that reduces the 200, 204 and 103 spectral bands of Indian Pines, 
+		Salinas and Pavia University to only 5, 4 and 7 input features—an overall 
+		reduction of 97.5\%, 98.0\% and 93.2\%.
 		\item A relevance-graded three-stream 3D-2D CNN with residual shortcuts, CBAM and a GAP head, with fewer than 79,000 trainable parameters.
 		\item A five-seed ablation study on the three datasets covering the pipeline stages, the pooling head, the kernel design, the CBAM components and five metaheuristic optimizers, reported with mean and standard deviation.
 	\end{enumerate}
@@ -196,7 +199,7 @@
 	\subsection{Datasets and Experimental Setup}
 	We use the Indian Pines (IP), Salinas (SA) and Pavia University (PU) datasets, all publicly available. IP has $145\times145$ pixels, 200 bands after removing the water-absorption bands, 16 classes and 10,249 labelled pixels (8,200 for testing). SA has $512\times217$ pixels, 204 bands after removing 20 such bands, 16 classes and 54,129 labelled pixels (43,304 for testing). PU has $610\times340$ pixels, 103 bands, 9 classes and 42,776 labelled pixels (34,221 for testing). In IP some classes are very small; for example, Oats has only 3 and Grass-pasture-mowed only 5 training pixels, while SA and PU have much larger classes.
 	
-	The network is implemented in TensorFlow 2.20 and trained on a single NVIDIA T4 GPU in Google Colab. We use the Adam optimiser\cite{adam} with a learning rate of $5\times10^{-4}$, a batch size of 64 and at most 100 epochs. Categorical cross-entropy with label smoothing of 0.05\cite{labelsmooth} is used. Because the classes are unbalanced, class weights are computed from the inverse class frequency and softened with a power of 0.5. L2 regularisation ($10^{-5}$) is applied to the dense and separable convolution weights, and no data augmentation is used. The learning rate is halved if the validation loss does not improve for 6 epochs, and training stops if the validation accuracy does not improve for 15 epochs, restoring the best weights. The window size is $25\times25$. We report Overall Accuracy (OA), Average Accuracy (AA), Kappa coefficient and macro F1-score on the test set. To check stability, every model is trained with five seeds (42, 123, 456, 789, 1011) and we report the mean and the population standard deviation. The seeds change the network initialisation and batch order only; the data split and the selected features stay fixed.
+	The network is implemented in TensorFlow 2.21.0 and trained on a single NVIDIA T4 GPU in Google Colab. We use the Adam optimiser\cite{adam} with a learning rate of $5\times10^{-4}$, a batch size of 64 and at most 100 epochs. Categorical cross-entropy with label smoothing of 0.05\cite{labelsmooth} is used. Because the classes are unbalanced, class weights are computed from the inverse class frequency and softened with a power of 0.5. L2 regularisation ($10^{-5}$) is applied to the dense and separable convolution weights, and no data augmentation is used. The learning rate is halved if the validation loss does not improve for 6 epochs, and training stops if the validation accuracy does not improve for 15 epochs, restoring the best weights. The window size is $25\times25$. We report Overall Accuracy (OA), Average Accuracy (AA), Kappa coefficient and macro F1-score on the test set. To check stability, every model is trained with five seeds (42, 123, 456, 789, 1011) and we report the mean and the population standard deviation. The seeds change the network initialisation and batch order only; the data split and the selected features stay fixed.
 	
 	\subsection{Findings of the Experiments}
 	
@@ -249,13 +252,15 @@
 	\end{figure*}
 	
 	\subsubsection{Comparison with Other Methods}
-	Table~\ref{stateofarts} compares the proposed model with the methods of the earlier paper\cite{ahmed2024}. The rows of the other methods are taken from that paper, which uses the same 16/4/80 split and 15 input features. On Indian Pines the five-seed mean OA of the proposed model (98.92\%) is above the 2D-3D multibranch network\cite{multibranch} (98.67\%), 0.17 points below HybridSN\cite{hybridsn} (99.09\%) and 0.20 points below the earlier model\cite{ahmed2024} (99.12\%). Its AA (97.92\%) is lower than both of these (98.35\% and 99.35\%). On Salinas the OA (99.94\%) is 0.03 points below HybridSN and the multibranch network (99.97\%) and 0.06 points below the earlier model (100\%). On IP and SA these differences are within the seed-to-seed variation of our model or very small. On Pavia University the OA (99.47\%) equals that of Fast Compact 3D CNN\cite{compact} (99.46\%) but is 0.15, 0.41 and 0.47 points below the multibranch network (99.62\%), HybridSN (99.88\%) and the earlier model (99.94\%). These gaps are two to six times the seed-to-seed standard deviation (0.07), so on PU the compact model is less accurate than the 15-feature models. We therefore do not claim that the proposed model is more accurate. Its benefit is that it is comparable on IP and SA with one third and one quarter of the input features, and it uses less than half of the features on PU (7 of 15). Note that our values are means over five seeds, while the values of the other methods come from the earlier paper.
+	Table~\ref{stateofarts} compares the proposed model with the methods of the earlier paper\cite{ahmed2024}. The rows of the other methods are taken from\cite{ahmed2024}, where all 
+	of them were run with 15 input features on the 20\% training split. On Indian Pines the five-seed mean OA of the proposed model (98.92\%) is above the 2D-3D multibranch network\cite{multibranch} (98.67\%), 0.17 points below HybridSN\cite{hybridsn} (99.09\%) and 0.20 points below the earlier model\cite{ahmed2024} (99.12\%). Its AA (97.92\%) is lower than both of these (98.35\% and 99.35\%). On Salinas the OA (99.94\%) is 0.03 points below HybridSN and the multibranch network (99.97\%) and 0.06 points below the earlier model (100\%). On IP and SA these differences are within the seed-to-seed variation of our model or very small. On Pavia University the OA (99.47\%) equals that of Fast Compact 3D CNN\cite{compact} (99.46\%) but is 0.15, 0.41 and 0.47 points below the multibranch network (99.62\%), HybridSN (99.88\%) and the earlier model (99.94\%). These gaps are two to six times the seed-to-seed standard deviation (0.07), so on PU the compact model is less accurate than the 15-feature models. We therefore do not claim that the proposed model is more accurate. Its benefit is that it is comparable on IP and SA with one third and one quarter of the input features, and it uses less than half of the features on PU (7 of 15). Note that our values are means over five seeds, while the values of the other methods come from the earlier paper.
 	
 	\begin{table}[t]
 		\centering
-		\caption{Comparison (16\% training, 4\% validation, 80\% test). The rows 
-			of the other methods are taken from\cite{ahmed2024,multibranch2}, where 
-			all of them were run with 15 input features (Feat.) on the same split.}
+		\caption{Comparison (16\% training, 4\% validation, 80\% test). The 
+			rows of the other methods are taken from\cite{ahmed2024}, where all 
+			of them were run with 15 input features (Feat.) on the 20\% training 
+			split.}
 		\label{stateofarts}
 		\renewcommand*\arraystretch{1.05}
 		\footnotesize
