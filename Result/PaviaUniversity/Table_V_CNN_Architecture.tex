@@ -1,0 +1,64 @@
+\begin{tabular}{lllr}
+\toprule
+Layer & Type & Output Shape & Parameters \\
+\midrule
+hsi_input & InputLayer & (None, 25, 25, 7) & 0 \\
+expand_3d & Reshape & (None, 25, 25, 7, 1) & 0 \\
+most_select & Cropping3D & (None, 25, 25, 3, 1) & 0 \\
+most_conv3d_1 & Conv3D & (None, 25, 25, 3, 8) & 224 \\
+most_bn3d_1 & BatchNormalization & (None, 25, 25, 3, 8) & 32 \\
+moderate_select & Cropping3D & (None, 25, 25, 2, 1) & 0 \\
+most_conv3d_2 & Conv3D & (None, 25, 25, 3, 16) & 3472 \\
+moderate_conv3d_1 & Conv3D & (None, 25, 25, 2, 16) & 448 \\
+most_bn3d_2 & BatchNormalization & (None, 25, 25, 3, 16) & 64 \\
+moderate_bn3d_1 & BatchNormalization & (None, 25, 25, 2, 16) & 64 \\
+least_select & Cropping3D & (None, 25, 25, 2, 1) & 0 \\
+most_conv3d_3 & Conv3D & (None, 25, 25, 3, 32) & 13856 \\
+moderate_conv3d_2 & Conv3D & (None, 25, 25, 2, 32) & 13856 \\
+least_conv3d_1 & Conv3D & (None, 25, 25, 2, 32) & 896 \\
+most_bn3d_3 & BatchNormalization & (None, 25, 25, 3, 32) & 128 \\
+moderate_bn3d_2 & BatchNormalization & (None, 25, 25, 2, 32) & 128 \\
+least_bn3d_1 & BatchNormalization & (None, 25, 25, 2, 32) & 128 \\
+most_transition_to_2d & Reshape & (None, 25, 25, 96) & 0 \\
+moderate_transition_to_2d & Reshape & (None, 25, 25, 64) & 0 \\
+least_transition_to_2d & Reshape & (None, 25, 25, 64) & 0 \\
+most_branch_7x7 & SeparableConv2D & (None, 25, 25, 32) & 7808 \\
+most_residual_shortcut & Conv2D & (None, 25, 25, 32) & 3104 \\
+moderate_branch_5x5 & SeparableConv2D & (None, 25, 25, 32) & 3680 \\
+moderate_residual_shortcut & Conv2D & (None, 25, 25, 32) & 2080 \\
+least_branch_3x3 & SeparableConv2D & (None, 25, 25, 32) & 2656 \\
+least_residual_shortcut & Conv2D & (None, 25, 25, 32) & 2080 \\
+most_bn_7x7 & BatchNormalization & (None, 25, 25, 32) & 128 \\
+most_bn_shortcut & BatchNormalization & (None, 25, 25, 32) & 128 \\
+moderate_bn_5x5 & BatchNormalization & (None, 25, 25, 32) & 128 \\
+moderate_bn_shortcut & BatchNormalization & (None, 25, 25, 32) & 128 \\
+least_bn_3x3 & BatchNormalization & (None, 25, 25, 32) & 128 \\
+least_bn_shortcut & BatchNormalization & (None, 25, 25, 32) & 128 \\
+most_stream_fusion & Concatenate & (None, 25, 25, 64) & 0 \\
+moderate_stream_fusion & Concatenate & (None, 25, 25, 64) & 0 \\
+least_stream_fusion & Concatenate & (None, 25, 25, 64) & 0 \\
+group_fusion & Concatenate & (None, 25, 25, 192) & 0 \\
+feature_projection & Conv2D & (None, 25, 25, 64) & 12352 \\
+bn_projection & BatchNormalization & (None, 25, 25, 64) & 256 \\
+spatial_pooling & MaxPooling2D & (None, 12, 12, 64) & 0 \\
+cbam_avg_pool & GlobalAveragePooling2D & (None, 64) & 0 \\
+cbam_max_pool & GlobalMaxPooling2D & (None, 64) & 0 \\
+cbam_shared_dense_1 & Dense & (None, 8) & 520 \\
+cbam_shared_dense_2 & Dense & (None, 64) & 576 \\
+cbam_channel_sum & Add & (None, 64) & 0 \\
+cbam_channel_attention & Activation & (None, 64) & 0 \\
+cbam_channel_reshape & Reshape & (None, 1, 1, 64) & 0 \\
+cbam_scale_channel & Multiply & (None, 12, 12, 64) & 0 \\
+cbam_spatial_avg_pool & Lambda & (None, 12, 12, 1) & 0 \\
+cbam_spatial_max_pool & Lambda & (None, 12, 12, 1) & 0 \\
+cbam_spatial_concat & Concatenate & (None, 12, 12, 2) & 0 \\
+cbam_spatial_attention & Conv2D & (None, 12, 12, 1) & 99 \\
+cbam_scale_spatial & Multiply & (None, 12, 12, 64) & 0 \\
+residual_attention_add & Add & (None, 12, 12, 64) & 0 \\
+cbam_out & Activation & (None, 12, 12, 64) & 0 \\
+final_gap & GlobalAveragePooling2D & (None, 64) & 0 \\
+dense_head & Dense & (None, 128) & 8320 \\
+dropout & Dropout & (None, 128) & 0 \\
+softmax_output & Dense & (None, 9) & 1161 \\
+\bottomrule
+\end{tabular}

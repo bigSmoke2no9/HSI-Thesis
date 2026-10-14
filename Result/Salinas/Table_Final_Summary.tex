@@ -1,0 +1,28 @@
+\begin{tabular}{ll}
+\toprule
+Parameter & Value \\
+\midrule
+Dataset & Salinas \\
+Spatial Size & 512 × 217 \\
+Raw Bands & 204 \\
+Classes & 16 \\
+Split & 16% Train / 4% Validation / 80% Test \\
+Segmentation & Seg-3 \\
+Seg-PCA Features & 30 \\
+mRMR Features & 15 \\
+DE Selected Features & 4 \\
+DE picks in top mRMR third & 1 \\
+DE picks in middle mRMR third & 2 \\
+DE picks in bottom mRMR third & 1 \\
+Stream sizes (Most/Moderate/Least) & 2/1/1 \\
+Patch Size & 25 × 25 \\
+Augmentation & No \\
+CNN & Relevance-graded hybrid 3D/2D (most: 3xConv3D+7x7, moderate: 2xConv3D+5x5, least: 1xConv3D+3x3) + CBAM + GAP (3 streams) \\
+Final Classifier & CNN Softmax \\
+CNN Parameters & 70859 \\
+OA (%) & 99.898393 \\
+AA (%) & 99.897824 \\
+Kappa & 0.998869 \\
+Macro F1 (%) & 99.899487 \\
+\bottomrule
+\end{tabular}

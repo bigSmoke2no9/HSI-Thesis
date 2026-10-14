@@ -1,0 +1,28 @@
+\begin{tabular}{ll}
+\toprule
+Parameter & Value \\
+\midrule
+Dataset & Pavia University \\
+Spatial Size & 610 × 340 \\
+Raw Bands & 103 \\
+Classes & 9 \\
+Split & 16% Train / 4% Validation / 80% Test \\
+Segmentation & Seg-3 \\
+Seg-PCA Features & 30 \\
+mRMR Features & 15 \\
+PSO Selected Features & 7 \\
+PSO picks in top mRMR third & 2 \\
+PSO picks in middle mRMR third & 2 \\
+PSO picks in bottom mRMR third & 3 \\
+Stream sizes (Most/Moderate/Least) & 3/2/2 \\
+Patch Size & 25 × 25 \\
+Augmentation & No \\
+CNN & Relevance-graded hybrid 3D/2D (most: 3xConv3D+7x7, moderate: 2xConv3D+5x5, least: 1xConv3D+3x3) + CBAM + GAP (3 streams) \\
+Final Classifier & CNN Softmax \\
+CNN Parameters & 78756 \\
+OA (%) & 99.570439 \\
+AA (%) & 99.122201 \\
+Kappa & 0.994311 \\
+Macro F1 (%) & 98.997220 \\
+\bottomrule
+\end{tabular}
